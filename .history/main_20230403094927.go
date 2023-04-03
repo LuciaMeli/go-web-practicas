@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -75,8 +76,22 @@ func main() {
 		log.Fatal(err)
 	}
 	c.IndentedJSON(http.StatusOK, FindProducts(price))
+		/* price, err := strconv.ParseFloat(c.Query("priceGt"), 64)
+		if err!= nil {
+            c.JSON(http.StatusBadRequest, map[string]any{
+                "error": "bad request",
+            })
+        }
+		var products []Product
+		for i := range Products {
+			if Products[i].Price > price {
+				products = append(products, Products[i])
+                    c.IndentedJSON(http.StatusOK, products)
+                    return
+                }
+                c.IndentedJSON(http.StatusNotFound, nil)
+		} */
 }
-
 func FindProducts(price float64) []Product{
 
 	var products []Product

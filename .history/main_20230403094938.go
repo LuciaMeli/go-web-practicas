@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -75,8 +76,8 @@ func main() {
 		log.Fatal(err)
 	}
 	c.IndentedJSON(http.StatusOK, FindProducts(price))
-}
 
+}
 func FindProducts(price float64) []Product{
 
 	var products []Product

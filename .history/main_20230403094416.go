@@ -6,12 +6,17 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+
 	"github.com/gin-gonic/gin"
 )
 
 
 func main() {
-	//read file and make a products slice from it
+	/* data, err := dataLoader("products.json")
+	if err != nil {
+		panic(err)
+    }
+	fmt.Println(data) */
 	file, err := ioutil.ReadFile("products.json")
 	if err != nil {
 		log.Fatal(err)
@@ -21,6 +26,8 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+
 
 
 	router := gin.Default()
@@ -55,39 +62,38 @@ func main() {
 	} else {
 		c.IndentedJSON(http.StatusNotFound, nil)
 	}
-}
-
-	func ProductExist(index int) (Product, bool) {
-
-		var product Product
+		/* id, error := strconv.Atoi(c.Param("id"))
+		if error!= nil {
+            c.JSON(http.StatusBadRequest, map[string]any{
+				"error": "bad request",
+            })
+        }
+		for i, p := range Products {
+			if Products[i].Id == id{
+                    c.IndentedJSON(http.StatusOK, p)
+					
+                }
+				c.IndentedJSON(http.StatusNotFound, nil)
+		} */
+    }
 	
-		for i := range Products {
-			if Products[i].Id == index {
-				return Products[i], true
-			}
-		}
-		return product , false
-	}
 
 	func ProductSearch(c *gin.Context) {
 		price, err := strconv.ParseFloat(c.Query("priceGt"), 64)
-	if err != nil {
-		log.Fatal(err)
-	}
-	c.IndentedJSON(http.StatusOK, FindProducts(price))
-}
-
-func FindProducts(price float64) []Product{
-
-	var products []Product
-
-	for i := range Products {
-		if Products[i].Price > price {
-			products = append(products, Products[i])
+		if err!= nil {
+            c.JSON(http.StatusBadRequest, map[string]any{
+                "error": "bad request",
+            })
+        }
+		var products []Product
+		for i := range Products {
+			if Products[i].Price > price {
+				products = append(products, Products[i])
+                    c.IndentedJSON(http.StatusOK, products)
+                    return
+                }
+                c.IndentedJSON(http.StatusNotFound, nil)
 		}
-	}
-
-	return products
 }
 
 type Product struct {
@@ -101,3 +107,20 @@ type Product struct {
 }
 
 var Products = []Product{}
+
+/* func dataLoader(filename string) ([]Product, error) {
+	f, err := os.Open(filename)
+	if err != nil {
+		return nil, err
+    }
+	defer f.Close()
+
+
+	decoder := json.NewDecoder(f)
+	err = decoder.Decode(&Products)
+	if err != nil {
+		return nil, err
+    }
+
+	return Products, nil
+} */

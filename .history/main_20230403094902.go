@@ -6,12 +6,13 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+
 	"github.com/gin-gonic/gin"
 )
 
 
 func main() {
-	//read file and make a products slice from it
+	//read file and make a products slice from
 	file, err := ioutil.ReadFile("products.json")
 	if err != nil {
 		log.Fatal(err)
@@ -21,6 +22,8 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+
 
 
 	router := gin.Default()
@@ -55,8 +58,20 @@ func main() {
 	} else {
 		c.IndentedJSON(http.StatusNotFound, nil)
 	}
-}
-
+		/* id, error := strconv.Atoi(c.Param("id"))
+		if error!= nil {
+            c.JSON(http.StatusBadRequest, map[string]any{
+				"error": "bad request",
+            })
+        }
+		for i, p := range Products {
+			if Products[i].Id == id{
+                    c.IndentedJSON(http.StatusOK, p)
+					
+                }
+				c.IndentedJSON(http.StatusNotFound, nil)
+		} */
+    }
 	func ProductExist(index int) (Product, bool) {
 
 		var product Product
@@ -75,8 +90,22 @@ func main() {
 		log.Fatal(err)
 	}
 	c.IndentedJSON(http.StatusOK, FindProducts(price))
+		/* price, err := strconv.ParseFloat(c.Query("priceGt"), 64)
+		if err!= nil {
+            c.JSON(http.StatusBadRequest, map[string]any{
+                "error": "bad request",
+            })
+        }
+		var products []Product
+		for i := range Products {
+			if Products[i].Price > price {
+				products = append(products, Products[i])
+                    c.IndentedJSON(http.StatusOK, products)
+                    return
+                }
+                c.IndentedJSON(http.StatusNotFound, nil)
+		} */
 }
-
 func FindProducts(price float64) []Product{
 
 	var products []Product
